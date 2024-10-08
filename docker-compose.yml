@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  nirvana:
+    build: .
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    networks:
+      - nirvana-network
+
+  redis-server:
+    image: "redis:7.2.5"
+    ports:
+      - "6379:6379"
+    networks:
+      - nirvana-network
+
+  proxy:
+    container_name: discord-proxy
+    image: ghcr.io/twilight-rs/http-proxy:metrics
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    environment:
+      - RUST_LOG=warn,info,debug,trace
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - nirvana-network
+
+networks:
+  nirvana-network:
+    driver: bridge

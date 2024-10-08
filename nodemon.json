@@ -1,0 +1,6 @@
+{
+  "watch": ["bot"],
+  "ext": "ts",
+  "ignore": ["dist/*"],
+  "exec": "node --loader ts-node/esm ./bot/index.ts"
+}
